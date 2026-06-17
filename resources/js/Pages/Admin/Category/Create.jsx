@@ -92,7 +92,7 @@ export default function Create() {
                                 </Button>
                                 <Button
                                     component={Link}
-                                    href="/products"
+                                    href="/categories"
                                     variant="outlined"
                                     size="large"
                                 >

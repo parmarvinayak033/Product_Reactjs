@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, Link } from '@inertiajs/react';
 import { useState } from 'react';
 
 import {
@@ -75,6 +75,14 @@ export default function Create() {
                                     variant="contained"
                                 >
                                     Save Size
+                                </Button>
+                                 <Button
+                                    component={Link}
+                                    href="/sizes"
+                                    variant="outlined"
+                                    size="large"
+                                >
+                                    Back
                                 </Button>
                             </Box>
 

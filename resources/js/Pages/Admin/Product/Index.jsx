@@ -126,6 +126,9 @@ export default function Index({ products, filters }) {
                                             <strong>Price</strong>
                                         </TableCell>
                                         <TableCell>
+                                            <strong>Image</strong>
+                                        </TableCell>
+                                        <TableCell>
                                             <strong>Status</strong>
                                         </TableCell>
                                         <TableCell>
@@ -155,6 +158,22 @@ export default function Index({ products, filters }) {
                                                 </TableCell>
                                                 <TableCell>{product.description}</TableCell>
                                                 <TableCell>{product.price}</TableCell>
+                                                <TableCell>
+                                                    {product.image ? (
+                                                        <img
+                                                            src={`/storage/products/${product.image}`}
+                                                            alt={product.name}
+                                                            width="60"
+                                                            height="60"
+                                                            style={{
+                                                                objectFit: 'cover',
+                                                                borderRadius: '5px',
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        'No Image'
+                                                    )}
+                                                </TableCell>
                                                 <TableCell>{product.status}</TableCell>
                                                 <TableCell>
                                                     <Button

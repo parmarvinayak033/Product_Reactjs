@@ -30,6 +30,7 @@ export default function Edit({
         name: product.name || '',
         description: product.description || '',
         price: product.price || '',
+        image: null,
         status: product.status || 'Active',
 
         colors: product.colors
@@ -42,19 +43,39 @@ export default function Edit({
     });
 
     const handleChange = (e) => {
+        const { name, value, files } = e.target;
+
         setData({
             ...data,
-            [e.target.name]: e.target.value,
+            [name]: files ? files[0] : value,
         });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        router.put(
-            `/products/${product.id}`,
-            data
-        );
+        const formData = new FormData();
+
+        Object.keys(data).forEach((key) => {
+
+            if (Array.isArray(data[key])) {
+
+                data[key].forEach((value) => {
+                    formData.append(`${key}[]`, value);
+                });
+
+            } else if (data[key] !== null) {
+
+                formData.append(key, data[key]);
+            }
+        });
+
+formData.append('_method', 'PUT');
+
+router.post(
+    `/products/${product.id}`,
+    formData
+);
     };
 
     return (
@@ -128,6 +149,35 @@ export default function Edit({
                                 name="price"
                                 value={data.price}
                                 onChange={handleChange}
+                            />
+
+                            {product.image && (
+                                <Box mt={2}>
+                                    <Typography variant="body2">
+                                        Current Image
+                                    </Typography>
+
+                                    <img
+                                        src={`/storage/products/${product.image}`}
+                                        alt={product.name}
+                                        width="150"
+                                        style={{
+                                            borderRadius: '8px',
+                                            marginTop: '10px',
+                                        }}
+                                    />
+                                </Box>
+                            )}
+
+                            <TextField
+                                type="file"
+                                fullWidth
+                                margin="normal"
+                                name="image"
+                                onChange={handleChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
 
                            <FormControl fullWidth margin="normal">

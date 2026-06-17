@@ -29,22 +29,37 @@ export default function Create({
         name: '',
         description: '',
         price: '',
+        image: null,
         status: 'Active',
         colors: [],
         sizes: [],
     });
 
-    const handleChange = (e) => {
+   const handleChange = (e) => {
+        const { name, value, files } = e.target;
+
         setData({
             ...data,
-            [e.target.name]: e.target.value,
+            [name]: files ? files[0] : value,
         });
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+                e.preventDefault();
 
-        router.post('/products', data);
+                const formData = new FormData();
+
+        Object.keys(data).forEach((key) => {
+            if (Array.isArray(data[key])) {
+                data[key].forEach((value) => {
+                    formData.append(`${key}[]`, value);
+                });
+            } else {
+                formData.append(key, data[key]);
+            }
+        });
+
+        router.post('/products', formData);
     };
 
     return (
@@ -118,6 +133,17 @@ export default function Create({
                                 name="price"
                                 value={data.price}
                                 onChange={handleChange}
+                            />
+
+                            <TextField
+                                type="file"
+                                fullWidth
+                                margin="normal"
+                                name="image"
+                                onChange={handleChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
 
                             <FormControl fullWidth margin="normal">

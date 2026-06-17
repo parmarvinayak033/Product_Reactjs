@@ -47,6 +47,24 @@ export default function Show({ product }) {
                             <strong>Price:</strong>{' '}
                             {product.price}
                         </Typography>
+                        <Typography sx={{ mt: 2 }}>
+                            <strong>Image:</strong>
+                        </Typography>
+
+                        {product.image ? (
+                            <Box mt={1}>
+                                <img
+                                    src={`/storage/products/${product.image}`}
+                                    alt={product.name}
+                                    width="250"
+                                    style={{
+                                        borderRadius: '8px',
+                                    }}
+                                />
+                            </Box>
+                        ) : (
+                            <Typography>No Image</Typography>
+                        )}
 
                         <Typography sx={{ mt: 2 }}>
                             <strong>Colors:</strong>{' '}

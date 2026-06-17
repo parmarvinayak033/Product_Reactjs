@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Size;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -67,16 +68,32 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'description' => 'nullable',
             'price' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'status' => 'required',
             'colors' => 'required|array',
             'sizes' => 'required|array',
         ]);
+
+        $imageName = null;
+
+        if ($request->hasFile('image')) {
+
+            $imageName = time() . '_' .
+                $request->file('image')->getClientOriginalName();
+
+            $request->file('image')->storeAs(
+                'products',
+                $imageName,
+                'public'
+            );
+        }
 
         $product = Product::create([
             'category_id' => $request->category_id,
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
+            'image' => $imageName,
             'status' => $request->status,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
@@ -118,16 +135,43 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'description' => 'nullable',
             'price' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'status' => 'required',
             'colors' => 'required|array',
             'sizes' => 'required|array',
         ]);
+
+        $imageName = $product->image;
+
+        if ($request->hasFile('image')) {
+
+            if (
+                $product->image &&
+                Storage::disk('public')->exists(
+                    'products/' . $product->image
+                )
+            ) {
+                Storage::disk('public')->delete(
+                    'products/' . $product->image
+                );
+            }
+
+            $imageName = time() . '_' .
+                $request->file('image')->getClientOriginalName();
+
+            $request->file('image')->storeAs(
+                'products',
+                $imageName,
+                'public'
+            );
+        }
 
         $product->update([
             'category_id' => $request->category_id,
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
+            'image' => $imageName,
             'status' => $request->status,
             'updated_by' => Auth::id(),
         ]);

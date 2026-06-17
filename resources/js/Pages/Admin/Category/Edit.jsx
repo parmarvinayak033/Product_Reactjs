@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, Link } from '@inertiajs/react';
 import { useState } from 'react';
 
 import {
@@ -89,6 +89,14 @@ export default function Edit({ category }) {
                                     variant="contained"
                                 >
                                     Update Category
+                                </Button>
+                                <Button
+                                    component={Link}
+                                    href="/categories"
+                                    variant="outlined"
+                                    size="large"
+                                >
+                                    Back
                                 </Button>
                             </Box>
 
